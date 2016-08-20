@@ -1,8 +1,10 @@
 package cooker.editor;
 
-import cooker.core.scripter.Cook;
+import cooker.core.scripter.Chef;
+import cooker.core.scripter.Cooking;
 import cooker.core.scripter.JSONReader;
 import cooker.core.scripter.RecipeTCA;
+import cooker.core.scripter.Waiter;
 
 public class ConsoleEditor {
 	public static void main(String[] args) {
@@ -23,7 +25,9 @@ public class ConsoleEditor {
        
 		JSONReader jr = new JSONReader();
 		RecipeTCA r = jr.readFromFile("recipes/sample.json");
-		Cook s = new Cook();
-		s.cooking(r);
+		Chef s = new Chef();
+		Cooking c = s.cook(r);
+		Waiter w = new Waiter();
+		w.serve(c);
 	}
 }

@@ -3,13 +3,10 @@ package cooker.core.scripter;
 import java.util.ArrayList;
 import java.util.List;
 
-import cooker.core.annotations.CookerAction;
-import cooker.core.annotations.CookerCondition;
-import cooker.core.annotations.CookerTrigger;
-
 public class RecipeTCA {
 	
 	public static class Builder{
+		private String name;
 		private Class<?> trigger;
 		private Class<?> condition;
 		private Class<?> actionY;
@@ -23,6 +20,11 @@ public class RecipeTCA {
 			this.actionN = actionN;
 		}
 		
+		public Builder setName(String name){
+			this.name = name;
+			return this;
+		}
+		
 		public Builder addLink(Link link){
 			links.add(link);
 			return this;
@@ -31,20 +33,22 @@ public class RecipeTCA {
 		public RecipeTCA build(){
 			RecipeTCA r = new RecipeTCA(trigger, condition, actionY, actionN);
 			r.links = links;
+			r.name = name;
 			return r;
 		}
 	}
 	
-	Component<CookerTrigger> trigger;
-	Component<CookerCondition> condition;
-	Component<CookerAction> actionY;
-	Component<CookerAction> actionN;
+	String name;
+	Class<?> trigger;
+	Class<?> condition;
+	Class<?> actionY;
+	Class<?> actionN;
 	List<Link> links = new ArrayList<>();
 	
-	RecipeTCA(Class<? extends Object> trigger, Class<? extends Object> condition, Class<? extends Object> actionY, Class<? extends Object> actionN){
-		this.trigger = new Component<>(trigger, CookerTrigger.class);
-		this.condition = new Component<>(condition, CookerCondition.class);
-		this.actionY = new Component<>(actionY, CookerAction.class);
-		this.actionN = new Component<>(actionN, CookerAction.class);
+	private RecipeTCA(Class<? extends Object> trigger, Class<? extends Object> condition, Class<? extends Object> actionY, Class<? extends Object> actionN){
+		this.trigger = trigger;
+		this.condition = condition;
+		this.actionY = actionY;
+		this.actionN = actionN;
 	}
 }

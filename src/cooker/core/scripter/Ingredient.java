@@ -8,20 +8,20 @@ import java.util.function.Predicate;
 import cooker.core.annotations.CookerEvent;
 import cooker.core.debug.CookerException;
 
-class Component<A extends Annotation> {
+class Ingredient<A extends Annotation> {
 	
 	protected Class<?> clazz;
 	protected Class<A> aClazz;
-	protected Object clone;
+	protected Object instance;
 	
-	Component(Class<?> clazz, Class<A> aClazz){
+	Ingredient(Class<?> clazz, Class<A> aClazz){
 		this.clazz = clazz;
 		this.aClazz = aClazz;
 	}
 	
 	void newInstance() throws CookerException{ 
 		try {
-			this.clone = clazz.newInstance();
+			this.instance = clazz.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new CookerException("Component can not instatiate %s", clazz.getSimpleName());
 		} 
@@ -39,7 +39,7 @@ class Component<A extends Annotation> {
 		if(method == null)
 			return null;
 		try {
-			return method.invoke(clone, new Object[]{});
+			return method.invoke(instance, new Object[]{});
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			e1.printStackTrace();
 			return null;
@@ -47,7 +47,7 @@ class Component<A extends Annotation> {
 	}
 	
 	Method getEventMethod(final CookerEvent.EventType eventType){
-		return AnnotationHelper.<CookerEvent>getMethod(clone, CookerEvent.class, new Predicate<CookerEvent>() {
+		return AnnotationHelper.<CookerEvent>getMethod(instance, CookerEvent.class, new Predicate<CookerEvent>() {
 			@Override
 			public boolean test(CookerEvent t) {
 				return t.eventType().equals(eventType);
@@ -56,10 +56,10 @@ class Component<A extends Annotation> {
 	}
 	
 	Method getTCAMethod(){
-		return AnnotationHelper.getMethod(clone, aClazz);
+		return AnnotationHelper.getMethod(instance, aClazz);
 	}
 	
 	A getTCA(){
-		return AnnotationHelper.getMethod(clone, aClazz).getDeclaredAnnotation(aClazz);
+		return AnnotationHelper.getMethod(instance, aClazz).getDeclaredAnnotation(aClazz);
 	}
 }

@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface CookerTrigger{
 	final String SYNONYM = "trigger";
-	enum TriggerType{ONCE, EVENT}
-	TriggerType triggerType();	
+	enum TriggerType{SYNC, ASYNC}
+	TriggerType triggerType();
 }
