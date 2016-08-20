@@ -10,8 +10,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
-public @interface CookingIngredient {
-	String name() default "";
+public @interface CookerIngredient {
 	String document() default "";
 	String tag() default "";
 }

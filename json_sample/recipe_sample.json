@@ -1,0 +1,43 @@
+{
+  "trigger": {
+    "URL": "http://12.25.50.1/",
+    "file": "cooker_sample.jar",
+    "className": "ConsoleTrigger"
+  },
+  "condition": {
+    "URL": "http://12.25.50.1/",
+    "file": "cooker_sample.jar",
+    "className": "ConsoleTrigger"
+  },
+  "actionY": {
+    "URL": "http://12.25.50.1/",
+    "file": "cooker_sample.jar",
+    "className": "ConsoleTrigger"
+  },
+  "actionN": {
+    "URL": "http://12.25.50.1/",
+    "file": "cooker_sample.jar",
+    "className": "ConsoleTrigger"
+  },
+  
+  "links": [
+    {
+        "from": 
+        {
+            "ingredient":"trigger",
+            "key":"command"
+        },
+        "to":
+        {
+          "ingredient": "condition",
+          "key": "target"
+        }
+    },
+    {
+      
+    }
+    
+    ["trigger", "command", "condition", "target"],
+    ["trigger", "content", "actionY", "text"]
+  ]
+}
