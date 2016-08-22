@@ -1,0 +1,129 @@
+{
+  "trigger": {
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.ButtonTrigger"
+  },
+  "condition": {
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.PlusCondition"
+  },
+  "actionY": {
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.DialogAction"
+  },
+  "actionN": {
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.DialogAction"
+  },
+  
+  "links": [ 
+	{
+        "from":
+        {
+            "ingredient":"trigger",
+            "key":"value1"
+        },
+        
+        "to":
+        {
+          "ingredient": "condition",
+            "key": "value1"
+        }
+	},
+	{
+     	"from": 
+        {
+            "ingredient":"trigger",
+            "key":"value2"
+        },
+        
+        "to":
+        {
+          "ingredient": "condition",
+          "key": "value2"
+      	}
+	},
+  {
+      "from": 
+        {
+            "ingredient":"trigger",
+            "key":"answer"
+        },
+        
+        "to":
+        {
+          "ingredient": "condition",
+          "key": "userAnswer"
+        }
+  },
+  {
+      "from": 
+        {
+            "ingredient":"trigger",
+            "key":"awtFrame"
+        },
+        
+        "to":
+        {
+          "ingredient": "actionY",
+          "key": "awtFrame"
+        }
+  },
+  {
+      "from": 
+        {
+            "ingredient":"trigger",
+            "key":"awtFrame"
+        },
+        
+        "to":
+        {
+          "ingredient": "actionN",
+          "key": "awtFrame"
+        }
+  },
+  {
+      "from": 
+        {
+            "ingredient":"condition",
+            "key":"output"
+        },
+        
+        "to":
+        {
+          "ingredient": "actionY",
+          "key": "message1"
+        }
+  },    
+  {
+      "from": 
+        {
+            "ingredient":"condition",
+            "key":"output"
+        },
+        
+        "to":
+        {
+          "ingredient": "actionN",
+          "key": "message1"
+        }
+  },
+  {
+      "from": 
+        {
+            "ingredient":"condition",
+            "key":"rightAnswer"
+        },
+        
+        "to":
+        {
+          "ingredient": "actionN",
+          "key": "message2"
+        }
+  }
+  ]
+}

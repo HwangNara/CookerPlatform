@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(METHOD)
 public @interface CookerEvent {
-	enum EventType{OnSTART, OnEND};
+	enum EventType{OnCook, OnServiceStart, OnFire, OnServiceEND};
 	EventType eventType();
 }

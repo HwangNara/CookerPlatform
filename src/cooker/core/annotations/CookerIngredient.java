@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 public @interface CookerIngredient {
 	String document() default "";
+	String name() default "";
 	String tag() default "";
 }

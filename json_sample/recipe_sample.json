@@ -1,43 +1,51 @@
 {
   "trigger": {
-    "URL": "http://12.25.50.1/",
-    "file": "cooker_sample.jar",
-    "className": "ConsoleTrigger"
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.ButtonTrigger"
   },
   "condition": {
-    "URL": "http://12.25.50.1/",
-    "file": "cooker_sample.jar",
-    "className": "ConsoleTrigger"
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.TextCondition"
   },
   "actionY": {
-    "URL": "http://12.25.50.1/",
-    "file": "cooker_sample.jar",
-    "className": "ConsoleTrigger"
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.ConsoleAction"
   },
   "actionN": {
-    "URL": "http://12.25.50.1/",
-    "file": "cooker_sample.jar",
-    "className": "ConsoleTrigger"
+    "URL": "cooker-1.0/ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.DoNothingAction"
   },
   
-  "links": [
-    {
-        "from": 
+  "links": [ 
+	{
+        "from":
         {
             "ingredient":"trigger",
             "key":"command"
         },
+        
         "to":
         {
           "ingredient": "condition",
           "key": "target"
         }
-    },
-    {
-      
-    }
-    
-    ["trigger", "command", "condition", "target"],
-    ["trigger", "content", "actionY", "text"]
+	},
+  	{
+     	"from": 
+        {
+            "ingredient":"trigger",
+            "key":"content"
+        },
+        
+        "to":
+        {
+          "ingredient": "actionY",
+          "key": "text"
+      	}
+	}
   ]
 }

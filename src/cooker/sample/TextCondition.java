@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import cooker.core.annotations.CookerCondition;
 import cooker.core.annotations.CookerEvent;
 import cooker.core.annotations.CookerEvent.EventType;
+import cooker.core.annotations.CookerIngredient;
 import cooker.core.annotations.CookerSerializable;
-import cooker.core.annotations.CookingIngredient;
 
-@CookingIngredient
+@CookerIngredient
 public class TextCondition {
 
 	@CookerSerializable(key="target")
@@ -16,7 +16,7 @@ public class TextCondition {
 	
 	public ArrayList<String> filters;
 	
-	@CookerEvent(eventType=EventType.OnSTART)
+	@CookerEvent(eventType=EventType.OnCook)
 	public void start(){
 		filters = new ArrayList<>();
 		filters.add("print");
@@ -24,10 +24,14 @@ public class TextCondition {
 	
 	@CookerCondition()
 	public boolean filter(){
+		boolean result = false;
 		for (String string : filters) {
-			if(string.equals(text))
-				return true;
+			if(string.equalsIgnoreCase(text)){
+				result = true;
+				break;
+			}
 		}
-		return false;
+		System.out.println("condition is " + result);
+		return result;
 	}
 }

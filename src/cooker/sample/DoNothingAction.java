@@ -1,9 +1,13 @@
 package cooker.sample;
 
-import cooker.core.annotations.CookingIngredient;
+import cooker.core.annotations.CookerAction;
+import cooker.core.annotations.CookerIngredient;
 
-@CookingIngredient
+@CookerIngredient
 public class DoNothingAction {
-
 	
+	@CookerAction
+	public void DoNothing(){
+		
+	}
 }

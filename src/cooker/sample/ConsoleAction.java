@@ -1,10 +1,10 @@
 package cooker.sample;
 
 import cooker.core.annotations.CookerAction;
+import cooker.core.annotations.CookerIngredient;
 import cooker.core.annotations.CookerSerializable;
-import cooker.core.annotations.CookingIngredient;
 
-@CookingIngredient
+@CookerIngredient
 public class ConsoleAction {
 
 	@CookerSerializable(key = "text")

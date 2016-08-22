@@ -1,10 +1,10 @@
 package cooker.editor;
 
-import cooker.core.scripter.RecipeTCA;
+import cooker.core.scripter.recipes.TCARecipe;
 
 public class JSONWriter {
 
-	public void writeToFile(RecipeTCA recipe){
+	public void writeToFile(TCARecipe recipe){
 		
 	}
 }
