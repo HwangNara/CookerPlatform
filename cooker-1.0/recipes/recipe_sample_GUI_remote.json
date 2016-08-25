@@ -1,21 +1,21 @@
 {
   "trigger": {
-    "URL": "http://52.32.237.177:8080/home/centos/apache-tomcat-8.0.36/webapps/cook/",
+    "URL": "http://52.32.237.177:8888/cook/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.ButtonTrigger"
   },
   "condition": {
-    "URL": "http://52.32.237.177:8080/home/centos/apache-tomcat-8.0.36/webapps/cook/",
+    "URL": "http://52.32.237.177:8888/cook/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.PlusCondition"
   },
   "actionY": {
-    "URL": "http://52.32.237.177:8080/home/centos/apache-tomcat-8.0.36/webapps/cook/",
+    "URL": "http://52.32.237.177:8888/cook/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.DialogAction"
   },
   "actionN": {
-    "URL": "http://52.32.237.177:8080/home/centos/apache-tomcat-8.0.36/webapps/cook/",
+    "URL": "http://52.32.237.177:8888/cook/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.DialogAction"
   },
