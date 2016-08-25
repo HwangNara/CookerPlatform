@@ -1,21 +1,21 @@
 {
   "trigger": {
-    "URL": "cooker-1.0/ingredients/",
+    "URL": "ingredients/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.ButtonTrigger"
   },
   "condition": {
-    "URL": "cooker-1.0/ingredients/",
+    "URL": "ingredients/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.PlusCondition"
   },
   "actionY": {
-    "URL": "cooker-1.0/ingredients/",
+    "URL": "ingredients/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.DialogAction"
   },
   "actionN": {
-    "URL": "cooker-1.0/ingredients/",
+    "URL": "ingredients/",
     "file": "tca_sample.jar",
     "className": "cooker.sample.DialogAction"
   },

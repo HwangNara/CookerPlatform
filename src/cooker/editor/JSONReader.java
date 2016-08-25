@@ -20,6 +20,7 @@ public class JSONReader {
 	
 	public TCARecipe readFromFile(String path){
 		try {
+			System.out.println("read recipe : " + path);
 			JSONParser jsonParser = new JSONParser();
 	        String jsonInfo = readFile(path, Charset.defaultCharset());
 	        JSONObject root = (JSONObject) jsonParser.parse(jsonInfo);

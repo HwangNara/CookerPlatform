@@ -2,7 +2,7 @@
   "trigger": {
     "URL": "cooker-1.0/ingredients/",
     "file": "tca_sample.jar",
-    "className": "cooker.sample.ButtonTrigger"
+    "className": "cooker.sample.ConsoleTrigger"
   },
   "condition": {
     "URL": "cooker-1.0/ingredients/",

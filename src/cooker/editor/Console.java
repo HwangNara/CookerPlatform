@@ -13,7 +13,7 @@ import cooker.core.scripter.cookings.Chef;
 import cooker.core.scripter.cookings.Cooking;
 import cooker.core.scripter.recipes.TCARecipe;
 
-public class ConsoleEditor {
+public class Console {
 	
 	private static Properties properties;
 	private static String recipePathRoot;
@@ -23,8 +23,8 @@ public class ConsoleEditor {
 	private static Map<Long, CookerServicer> services = new HashMap<>();
 	
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-       
-		InputStream is = new FileInputStream("cooker-1.0/console.properties");
+		
+		InputStream is = new FileInputStream("console.properties");
 		properties = new Properties();
 		properties.load(is);
 		recipePathRoot = properties.get("recipe_path").toString();
