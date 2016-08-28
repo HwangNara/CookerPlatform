@@ -1,4 +1,4 @@
-package cooker.editor;
+package cooker.editor.console;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,16 +8,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 
-import cooker.core.scripter.CookerServicer;
-import cooker.core.scripter.cookings.Chef;
-import cooker.core.scripter.cookings.Cooking;
-import cooker.core.scripter.recipes.TCARecipe;
+import cooker.core.debug.CookerLogger;
+import cooker.core.scripter.recipes.Cooking;
+import cooker.core.scripter.recipes.chef.Chef;
+import cooker.core.scripter.service.CookerServicer;
 
 public class Console {
-	
+	private static final String TAG = Console.class.getSimpleName();
 	private static Properties properties;
 	private static String recipePathRoot;
-	private static TCARecipe currentRecipe;
 	private static Cooking currentCooking;	
 	private static Chef chef;
 	private static Map<Long, CookerServicer> services = new HashMap<>();
@@ -35,26 +34,21 @@ public class Console {
 			String content = line.length > 1 ? line[1] : "";
 			if(command.equalsIgnoreCase("cook")){
 				String recipeName = content;
-				JSONReader jr = new JSONReader();
 				String recipePath = recipePathRoot+ recipeName +".json";
-				currentRecipe = jr.readFromFile(recipePath);
-				if(currentRecipe == null){
-					println("cook fail - " + recipePath);
-					continue;
-				}
 				chef = new Chef();
-				currentCooking = chef.cook(currentRecipe);
+				currentCooking = chef.cook(recipePath);
 				if(currentCooking == null){
-					println("cook fail - " + recipePath);
+					CookerLogger.logln(TAG, "Cook fail T.T ");
+					continue;
 				}else{
-					println("cook complete! - " + recipePath);
+					CookerLogger.logln(TAG, "Cook complete! ");
 				}
 				continue;
 			}
 			
 			if(command.equalsIgnoreCase("start")){
 				if(currentCooking == null){
-					println("current cooking is required. command 'cook recipe_name' first");
+					CookerLogger.logln(TAG, "Current cooking is required. command 'cook recipe_name' first");
 				}else{
 					CookerServicer servicer = new CookerServicer(currentCooking);
 					servicer.setDaemon(true);					
@@ -66,12 +60,12 @@ public class Console {
 			
 			if(command.equalsIgnoreCase("end")){
 				if(content.isEmpty()){
-					println("please set service id");
+					CookerLogger.logln(TAG, "Please set service id");
 					continue;
 				}
 				Long key = Long.parseLong(content);
 				if(!services.containsKey(key)){
-					System.out.println("nothing which has service id " + key);
+					CookerLogger.logln(TAG, "Nothing which has service id " + key);
 					continue;
 				}
 				CookerServicer servicer = services.get(key);
@@ -83,13 +77,7 @@ public class Console {
 				sc.close();
 				System.exit(0);
 			}
-			println("not valid command. availabes are [cook/start/end/exit]");
+			CookerLogger.logln(TAG, "Not valid command. availabes are [cook/start/end/exit]");
 		}
 	}
-	
-	
-	private static void println(Object obj){
-		System.out.println("[Editor] " + obj.toString());
-	}
-	
 }

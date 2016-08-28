@@ -1,4 +1,6 @@
 {
+  "type": "TCA",
+
   "trigger": {
     "URL": "cooker-1.0/ingredients/",
     "file": "tca_sample.jar",
