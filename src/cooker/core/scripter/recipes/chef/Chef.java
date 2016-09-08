@@ -59,7 +59,7 @@ public class Chef {
 			}
 			@SuppressWarnings("resource")
 			ClassLoader classLoader = new URLClassLoader(urls);
-						
+			
 			//5. create ingredients and put into cooking
 			for (CookerURL cookerURL : cookerURLs) {
 				Class<?> clazz = classLoader.loadClass(cookerURL.className);

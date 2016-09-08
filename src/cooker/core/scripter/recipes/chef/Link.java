@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.function.Predicate;
 
 import cooker.core.annotations.CookerSerializable;
-import cooker.core.debug.CookerException;
 import cooker.core.debug.CookerLogger;
 import cooker.core.scripter.AnnotationHelper;
 import cooker.core.scripter.service.CookerServicer;

@@ -1,0 +1,14 @@
+{
+  "type": "Simple",
+
+  "main": {
+    "URL": "http://52.32.237.177:8888/cook/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.DialogAction"
+  },
+  
+  
+  "links": [ 
+	
+  ]
+}
