@@ -3,6 +3,8 @@ package cooker.editor.gui;
 import java.awt.Choice;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.charset.Charset;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -45,7 +47,9 @@ public class CenterPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String filePath = main.recipePathRoot + choice.getSelectedItem();
 		Chef chef = new Chef();
-		Cooking cooking = chef.cook(filePath);
+		File file = new File(filePath);
+		chef.readRecipe(file, Charset.defaultCharset());
+		Cooking cooking = chef.cook();
 		CookerServicer servicer = new CookerServicer(cooking);
 		servicer.start();
 	}

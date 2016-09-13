@@ -1,12 +1,20 @@
 package cooker.core.scripter.recipes.chef;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import cooker.core.annotations.CookerEvent.EventType;
+import cooker.core.annotations.CookerEvent;
+import cooker.core.debug.CookerException;
 import cooker.core.debug.CookerLogger;
 import cooker.core.scripter.recipes.Cooking;
 import cooker.core.scripter.recipes.SimpleCooking;
@@ -23,24 +31,52 @@ public class Chef {
 		{"trigger", "condition", "actionY", "actionN"}
 	};
 	
-	public Cooking cook(String filePath){
+	private IRecipeReader recipeReader;
+	private ICustomClassLoader customClassLoader;
+	
+	public Chef setCustomClassLoader(ICustomClassLoader customClassLoader){
+		this.customClassLoader = customClassLoader;
+		return this;
+	}
+	
+	public void readRecipe(InputStream is, Charset encoding){
 		try{
-			//1. create new file
-			File file = new File(filePath);
+			BufferedReader br = new BufferedReader(new InputStreamReader(is, encoding));
 			
-			//2. find file extension. 
-			int pos = filePath.lastIndexOf( "." );
-			String extension = filePath.substring( pos + 1 );
-			
-			//3. create extension assistant
-			IAssistantable assistant = null;
-			if(extension.equalsIgnoreCase("json")){
-				assistant = new JsonAssistant();
-				assistant.init(file);
+			StringBuilder sb = new StringBuilder();
+			String line = "";
+			while((line = br.readLine()) != null){
+				sb.append(line);
+				sb.append('\n');
 			}
-			
+			String entireString = sb.toString();
+			recipeReader = new JsonRecipeReader();
+			recipeReader.init(entireString);			
+			CookerLogger.logln("Succeed to read recipe!");			
+		}catch(IOException | CookerException e){
+			CookerLogger.logln("Failed reading recipe");
+		}
+	}
+	
+	public void readRecipe(File file, Charset encoding){
+		byte[] encoded;
+		Path path = file.toPath();
+		try {
+			encoded = Files.readAllBytes(path);
+			String str = new String(encoded, encoding);
+			recipeReader = new JsonRecipeReader();
+			recipeReader.init(str);
+			CookerLogger.logln("Succeed to read recipe!");
+		} catch (IOException | CookerException e) {
+			CookerLogger.logln("%s is not vaild path", path);
+		}
+	}
+
+	
+	public Cooking cook(){
+		try{
 			// 4. create empty cooking
-			RecipeType recipeType = assistant.getRecipeType();
+			RecipeType recipeType = recipeReader.getRecipeType();
 			Cooking cooking = newCooking(recipeType);
 			
 			// 3. add CookerURLs
@@ -48,17 +84,21 @@ public class Chef {
 			String[] ingredientKeys = Ingredient_Keys[recipeType.ordinal()];
 			for (int i = 0; i < ingredientKeys.length; i++) {
 				String key = ingredientKeys[i];
-				CookerURL cookerURL = assistant.getURL(key);
+				CookerURL cookerURL = recipeReader.getURL(key);
 				cookerURLs.add(cookerURL);
 			}
 						
 			//4. create class loader
-			URL[] urls = new URL[cookerURLs.size()];  
-			for (int i = 0; i < urls.length; i++) {
-				urls[i] = cookerURLs.get(i).toURL();
+			ClassLoader classLoader = null;
+			if(customClassLoader != null){
+				classLoader = this.customClassLoader.getClassLoader(cookerURLs);
+			}else{
+				URL[] urls = new URL[cookerURLs.size()];
+				for (int i = 0; i < urls.length; i++) {
+					urls[i] = cookerURLs.get(i).toURL();
+				}
+				classLoader = new URLClassLoader(urls);
 			}
-			@SuppressWarnings("resource")
-			ClassLoader classLoader = new URLClassLoader(urls);
 			
 			//5. create ingredients and put into cooking
 			for (CookerURL cookerURL : cookerURLs) {
@@ -71,7 +111,7 @@ public class Chef {
 			//6. create links and add into cooking
 			int i = 1;
 			Node from = null, to = null;			
-			for (Pair<String, String> linkPair : assistant.getLinkPairs()) {
+			for (Pair<String, String> linkPair : recipeReader.getLinkPairs()) {
 				String ingredientKey = linkPair.getElement0();
 				String serializableKey = linkPair.getElement1();
 				Ingredient ingredient = cooking.ingredients.get(ingredientKey);
@@ -88,7 +128,7 @@ public class Chef {
 			cooking.newInstance();
 			
 			//8. execute on cook event
-			cooking.executeEventMethod(EventType.OnCook);
+			cooking.executeEventMethod(CookerEvent.EventType.OnCook);
 			return cooking;
 		}catch(Exception e){
 			e.printStackTrace();

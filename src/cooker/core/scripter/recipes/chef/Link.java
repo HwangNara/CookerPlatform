@@ -1,11 +1,11 @@
 package cooker.core.scripter.recipes.chef;
 
 import java.lang.reflect.Field;
-import java.util.function.Predicate;
 
 import cooker.core.annotations.CookerSerializable;
 import cooker.core.debug.CookerLogger;
 import cooker.core.scripter.AnnotationHelper;
+import cooker.core.scripter.CookerPredicate;
 import cooker.core.scripter.service.CookerServicer;
 
 public class Link {
@@ -20,7 +20,7 @@ public class Link {
 		}
 		
 		public Field getField(){
-			return AnnotationHelper.getField(ingredient.instance, CookerSerializable.class, new Predicate<CookerSerializable>() {
+			return AnnotationHelper.getField(ingredient.instance, CookerSerializable.class, new CookerPredicate<CookerSerializable>() {
 
 				@Override
 				public boolean test(CookerSerializable t) {

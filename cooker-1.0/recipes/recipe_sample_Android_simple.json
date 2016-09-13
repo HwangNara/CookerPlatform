@@ -1,0 +1,14 @@
+{
+  "type": "Simple",
+
+  "main": {
+    "URL": "ingredients/",
+    "file": "tca_sample.jar",
+    "className": "cooker.sample.android.ToastAction"
+  },
+  
+  
+  "links": [ 
+	
+  ]
+}

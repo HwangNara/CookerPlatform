@@ -1,7 +1,9 @@
 package cooker.editor.console;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -35,7 +37,9 @@ public class Console {
 					String recipeName = content;
 					String recipePath = recipePathRoot+ recipeName +".json";
 					chef = new Chef();
-					currentCooking = chef.cook(recipePath);
+					File file = new File(recipePath);
+					chef.readRecipe(file, Charset.defaultCharset());
+					currentCooking = chef.cook();
 					if(currentCooking == null){
 						CookerLogger.logln(TAG, "Cook fail T.T ");
 						continue;

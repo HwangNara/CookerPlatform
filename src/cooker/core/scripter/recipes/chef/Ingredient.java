@@ -4,11 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.function.Predicate;
 
 import cooker.core.annotations.CookerEvent;
 import cooker.core.debug.CookerException;
 import cooker.core.scripter.AnnotationHelper;
+import cooker.core.scripter.CookerPredicate;
 
 public class Ingredient{
 	
@@ -44,7 +44,7 @@ public class Ingredient{
 	}
 		
 	public Object executeEventMethod(final CookerEvent.EventType eventType){
-		Method method = AnnotationHelper.<CookerEvent>getMethod(instance, CookerEvent.class, new Predicate<CookerEvent>() {
+		Method method = AnnotationHelper.getMethod(instance, CookerEvent.class, new CookerPredicate<CookerEvent>() {
 			@Override
 			public boolean test(CookerEvent t) {
 				return t.eventType().equals(eventType);

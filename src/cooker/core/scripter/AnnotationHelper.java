@@ -5,26 +5,25 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class AnnotationHelper {
 	
 	public static Method getMethod(Object object,  Class<? extends Annotation> aClazz){
 		for (Method method : object.getClass().getDeclaredMethods()) {
-			if(method.getDeclaredAnnotation(aClazz) == null)
-				continue;
-			return method;
+			Annotation annotation = getDeclaredAnnotation(method, aClazz);
+			if(annotation != null){
+				return method;
+			}
 		} 
 		return null;
 	}
 	
-	public static <A extends Annotation> Method getMethod(Object object, Class<A> aClazz, Predicate<A> predicate){
+	public static <A extends Annotation> Method getMethod(Object object, Class<A> aClazz, CookerPredicate<A> predicate){
 		for (Method method : object.getClass().getDeclaredMethods()) {
-			A a = method.getDeclaredAnnotation(aClazz);
-			if(a == null)
-				continue;
-			if(predicate.test(a))
+			Annotation annotation = getDeclaredAnnotation(method, aClazz, predicate);
+			if(annotation != null){
 				return method;
+			}
 		} 
 		return null;
 	}
@@ -32,40 +31,41 @@ public class AnnotationHelper {
 	public static List<Method> getMethods(Object object,  Class<? extends Annotation> aClazz){
 		List<Method> list = new ArrayList<>();
 		for (Method method : object.getClass().getDeclaredMethods()) {
-			if(method.getDeclaredAnnotation(aClazz) == null)
-				continue;
-			list.add(method);
+			Annotation annotation = getDeclaredAnnotation(method, aClazz);
+			if(annotation != null){
+				list.add(method);
+			}
 		} 
 		return list;
 	}
 	
-	public static <A extends Annotation> List<Method> getMethods(Object object, Class<A> aClazz, Predicate<A> predicate){
+	public static <A extends Annotation> List<Method> getMethods(Object object, Class<A> aClazz, CookerPredicate<A> predicate){
 		List<Method> list = new ArrayList<>();
 		for (Method method : object.getClass().getDeclaredMethods()) {
-			A a = method.getDeclaredAnnotation(aClazz);
-			if(a == null || !predicate.test(a))
-				continue;
-			list.add(method);
+			Annotation annotation = getDeclaredAnnotation(method, aClazz, predicate);
+			if(annotation != null){
+				list.add(method);
+			}
 		} 
 		return list;
 	}
 	
 	public static Field getField(Object object, Class<? extends Annotation> aClazz){
 		for (Field field : object.getClass().getDeclaredFields()) {
-			if(field.getDeclaredAnnotation(aClazz) == null)
-				continue;
-			return field;
+			Annotation annotation = getDeclaredAnnotation(field, aClazz);
+			if(annotation != null){
+				return field;
+			}
 		} 
 		return null;
 	}
 	
-	public static <A extends Annotation> Field getField(Object object, Class<A> aClazz, Predicate<A> predicate){
+	public static <A extends Annotation> Field getField(Object object, Class<A> aClazz, CookerPredicate<A> predicate){
 		for (Field field : object.getClass().getDeclaredFields()) {
-			A a = field.getDeclaredAnnotation(aClazz);
-			if(a == null)
-				continue;
-			if(predicate.test(a))
+			Annotation annotation = getDeclaredAnnotation(field, aClazz, predicate);
+			if(annotation != null){
 				return field;
+			}
 		} 
 		return null;
 	}
@@ -73,24 +73,70 @@ public class AnnotationHelper {
 	public static List<Field> getFields(Object object, Class<? extends Annotation> aClazz){
 		List<Field> list = new ArrayList<>();
 		for (Field field : object.getClass().getDeclaredFields()) {
-			if(field.getDeclaredAnnotation(aClazz) == null)
-				continue;
-			list.add(field);
+			Annotation annotation = getDeclaredAnnotation(field, aClazz);
+			if(annotation != null){
+				list.add(field);
+			}
 		} 
 		return list;
 	}
 	
-	public static <A extends Annotation> List<Field> getFields(Object object, Class<A> aClazz, Predicate<A> predicate){
+	public static <A extends Annotation> List<Field> getFields(Object object, Class<A> aClazz, CookerPredicate<A> predicate){
 		List<Field> list = new ArrayList<>();
-		for (Field field : object.getClass().getDeclaredFields()) {
-			A a = field.getDeclaredAnnotation(aClazz);
-			if(a == null || !predicate.test(a))
-				continue;
-			list.add(field);
+		for (Field field : object.getClass().getDeclaredFields()) {			
+			Annotation annotation = getDeclaredAnnotation(field, aClazz, predicate);
+			if(annotation != null){
+				list.add(field);
+			}
 		} 
 		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
+	private static <A extends Annotation> A getDeclaredAnnotation(Method method, Class<A> aClazz){
+		for (Annotation annotation : method.getDeclaredAnnotations()){
+			if(annotation.annotationType().equals(aClazz)){
+				return (A)annotation;
+			}
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <A extends Annotation> A getDeclaredAnnotation(Method method, Class<A> aClazz, CookerPredicate<A> predicate){
+		for (Annotation annotation : method.getDeclaredAnnotations()){
+			if(annotation.annotationType().equals(aClazz)){
+				A a = (A)annotation; 
+				if(predicate.test(a)){
+					return a;
+				}
+			}
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <A extends Annotation> A getDeclaredAnnotation(Field field, Class<A> aClazz){
+		for (Annotation annotation : field.getDeclaredAnnotations()){
+			if(annotation.annotationType().equals(aClazz)){
+				return (A)annotation;
+			}
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <A extends Annotation> A getDeclaredAnnotation(Field field, Class<A> aClazz, CookerPredicate<A> predicate){
+		for (Annotation annotation : field.getDeclaredAnnotations()){
+			if(annotation.annotationType().equals(aClazz)){
+				A a = (A)annotation; 
+				if(predicate.test(a)){
+					return a;
+				}
+			}
+		}
+		return null;
+	}
 
 	/*
 	

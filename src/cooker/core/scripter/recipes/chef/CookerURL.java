@@ -8,19 +8,28 @@ import cooker.core.debug.CookerException;
 
 public class CookerURL{
 	public static final String TAG = CookerURL.class.getSimpleName();
+	public static final String[] SUPPORTS = new String[] {"jar", "dex"};
+	
+	public static boolean isSupportExtension(String extension){
+		for (int i = 0; i < SUPPORTS.length; i++) {
+			if(SUPPORTS[i].equalsIgnoreCase(extension))
+				return true;
+		}
+		return false;
+	}
 	
 	public final String key;	
 	public final String url;
 	public final String fileName;
-	public final String extraction;
-	public final String className;
+	public final String extension;
+	public final String className;	
 	
-	public CookerURL(String key, String url, String fileName, String className) {
+	public CookerURL(String key, String url, String fileName, String extension, String className) {
 		super();
 		this.key = key;
 		this.url = url;
 		this.fileName = fileName;
-		this.extraction = fileName.substring( fileName.lastIndexOf( "." ) + 1 );
+		this.extension = extension;
 		this.className = className;
 	}
 
@@ -45,10 +54,10 @@ public class CookerURL{
 	}
 	
 	public String getExtractionURI(){
-		return String.format("%s:%s!/", extraction, getURI());
+		return String.format("%s:%s!/", extension, getURI());
 	}
 	
 	public String getFullURI(){
-		return String.format("%s:%s!/%s", extraction, getURI(), className);
+		return String.format("%s:%s!/%s", extension, getURI(), className);
 	}
 }
