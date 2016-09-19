@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,11 +30,22 @@ public class Chef {
 	};
 	
 	private IRecipeReader recipeReader;
-	private ICustomClassLoader customClassLoader;
+	private IClassLoaderable classLoaderable;
 	
-	public Chef setCustomClassLoader(ICustomClassLoader customClassLoader){
-		this.customClassLoader = customClassLoader;
-		return this;
+	public IRecipeReader getRecipeReader() {
+		return recipeReader;
+	}
+
+	public void setRecipeReader(IRecipeReader recipeReader) {
+		this.recipeReader = recipeReader;
+	}
+
+	public IClassLoaderable getClassLoaderable() {
+		return classLoaderable;
+	}
+
+	public void setClassLoaderable(IClassLoaderable classLoaderable) {
+		this.classLoaderable = classLoaderable;
 	}
 	
 	public void readRecipe(InputStream is, Charset encoding){
@@ -75,11 +84,19 @@ public class Chef {
 	
 	public Cooking cook(){
 		try{
-			// 4. create empty cooking
+			// check helpers
+			if(recipeReader == null){
+				throw new CookerException("RecipeReader is null");
+			}
+			if(classLoaderable == null){
+				throw new CookerException("ClassLoaderable is null");
+			}
+				
+			// create empty cooking
 			RecipeType recipeType = recipeReader.getRecipeType();
 			Cooking cooking = newCooking(recipeType);
 			
-			// 3. add CookerURLs
+			// add CookerURLs
 			List<CookerURL> cookerURLs = new ArrayList<>();
 			String[] ingredientKeys = Ingredient_Keys[recipeType.ordinal()];
 			for (int i = 0; i < ingredientKeys.length; i++) {
@@ -88,19 +105,10 @@ public class Chef {
 				cookerURLs.add(cookerURL);
 			}
 						
-			//4. create class loader
-			ClassLoader classLoader = null;
-			if(customClassLoader != null){
-				classLoader = this.customClassLoader.getClassLoader(cookerURLs);
-			}else{
-				URL[] urls = new URL[cookerURLs.size()];
-				for (int i = 0; i < urls.length; i++) {
-					urls[i] = cookerURLs.get(i).toURL();
-				}
-				classLoader = new URLClassLoader(urls);
-			}
+			// create class loader
+			ClassLoader classLoader = classLoaderable.getClassLoader(cookerURLs);
 			
-			//5. create ingredients and put into cooking
+			// create ingredients and put into cooking
 			for (CookerURL cookerURL : cookerURLs) {
 				Class<?> clazz = classLoader.loadClass(cookerURL.className);
 				CookerLogger.logln(TAG, cookerURL.getFullURI());
@@ -108,7 +116,7 @@ public class Chef {
 				cooking.ingredients.put(cookerURL.key, ingredient);
 			}
 						
-			//6. create links and add into cooking
+			// create links and add into cooking
 			int i = 1;
 			Node from = null, to = null;			
 			for (Pair<String, String> linkPair : recipeReader.getLinkPairs()) {
@@ -124,11 +132,12 @@ public class Chef {
 				i++;
 			}
 			
-			//7. create new instances of cooking ingredients
+			// create new instances of cooking ingredients
 			cooking.newInstance();
 			
-			//8. execute on cook event
+			// execute on cook event
 			cooking.executeEventMethod(CookerEvent.EventType.OnCook);
+			
 			return cooking;
 		}catch(Exception e){
 			e.printStackTrace();

@@ -2,7 +2,7 @@ package cooker.core.scripter.recipes.chef;
 
 import java.util.List;
 
-public interface ICustomClassLoader {
+public interface IClassLoaderable {
 
 	ClassLoader getClassLoader(List<CookerURL> cookerURLs);
 }

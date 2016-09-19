@@ -13,6 +13,8 @@ import javax.swing.border.Border;
 
 import cooker.core.scripter.recipes.Cooking;
 import cooker.core.scripter.recipes.chef.Chef;
+import cooker.core.scripter.recipes.chef.JarClassLoaderable;
+import cooker.core.scripter.recipes.chef.JsonRecipeReader;
 import cooker.core.scripter.service.CookerServicer;
 import cooker.editor.io.FileReader;
 
@@ -48,6 +50,8 @@ public class CenterPanel extends JPanel implements ActionListener{
 		String filePath = main.recipePathRoot + choice.getSelectedItem();
 		Chef chef = new Chef();
 		File file = new File(filePath);
+		chef.setRecipeReader(new JsonRecipeReader());
+		chef.setClassLoaderable(new JarClassLoaderable());
 		chef.readRecipe(file, Charset.defaultCharset());
 		Cooking cooking = chef.cook();
 		CookerServicer servicer = new CookerServicer(cooking);

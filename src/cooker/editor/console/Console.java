@@ -12,6 +12,8 @@ import java.util.Scanner;
 import cooker.core.debug.CookerLogger;
 import cooker.core.scripter.recipes.Cooking;
 import cooker.core.scripter.recipes.chef.Chef;
+import cooker.core.scripter.recipes.chef.JarClassLoaderable;
+import cooker.core.scripter.recipes.chef.JsonRecipeReader;
 import cooker.core.scripter.service.CookerServicer;
 
 public class Console {
@@ -37,6 +39,8 @@ public class Console {
 					String recipeName = content;
 					String recipePath = recipePathRoot+ recipeName +".json";
 					chef = new Chef();
+					chef.setRecipeReader(new JsonRecipeReader());
+					chef.setClassLoaderable(new JarClassLoaderable());
 					File file = new File(recipePath);
 					chef.readRecipe(file, Charset.defaultCharset());
 					currentCooking = chef.cook();
